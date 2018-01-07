@@ -50,15 +50,15 @@ class SignInPage(tk.Frame):
         button1 = tk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
         button1.pack()
         label1 = tk.Label(self, text="Login:", font=SMALL_FONT)
-        label1.pack(pady=10, padx=10)
+        label1.pack()
         login = tk.Entry(self)
         login.pack()
         label2 = tk.Label(self, text="Password:", font=SMALL_FONT)
-        label2.pack(pady=10, padx=10)
+        label2.pack()
         password = tk.Entry(self, show="*")
         password.pack()
         label3 = tk.Label(self, text="Password again:", font=SMALL_FONT)
-        label3.pack(pady=10, padx=10)
+        label3.pack()
         password1 = tk.Entry(self, show="*")
         password1.pack()
         button2 = tk.Button(self, text="Sign in", command=lambda: controller.show_frame(StartPage))
@@ -81,6 +81,8 @@ class ConnectPage(tk.Frame):
         on_start_button_clicked(self)
         button = tk.Button(self, text="Next", command=lambda: controller.show_frame(SearchPage))
         button.pack()
+        button1 = tk.Button(self, text="Failed", command=lambda: controller.show_frame(ServerDownPage))
+        button1.pack()
 
 
 
@@ -88,12 +90,22 @@ class ConnectPage(tk.Frame):
 class SearchPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Welcome to SharedPower", font=LARGE_FONT)
-        label.pack(pady=10, padx=10)
-        button1 = tk.Button(self, text="Sign in", command=lambda: controller.show_frame(SignInPage))
+        photoimage = tk.PhotoImage(file="res/user_64.png")
+
+        label2 = tk.Label(self, image=photoimage)
+
+        label2.image = photoimage
+        label2.pack()
+        username = tk.Label(self, text="Luke Logan", font=SMALL_FONT).pack()
+        button = tk.Button(self, text="Logout", command=lambda: controller.show_frame(SignInPage))
+        button.pack()
+        button1 = tk.Button(self, text="My Tools", command=lambda: controller.show_frame(MyToolsPage))
         button1.pack()
-        button2 = tk.Button(self, text="Login", command=lambda: controller.show_frame(ConnectPage))
+        search = tk.Entry(self)
+        search.pack()
+        button2 = tk.Button(self, text="Search", command=lambda: controller.show_frame(ResultPage))
         button2.pack()
+
 class ServerDownPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -103,20 +115,22 @@ class ServerDownPage(tk.Frame):
         label2 = tk.Label(self, image=photoimage)
         label2.image = photoimage
         label2.pack()
+        button = tk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
+        button.pack()
 class ResultPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Welcome to SharedPower", font=LARGE_FONT)
-        label.pack(pady=10, padx=10)
-        button1 = tk.Button(self, text="Sign in", command=lambda: controller.show_frame(SignInPage))
+        button1 = tk.Button(self, text="Logout", command=lambda: controller.show_frame(SignInPage))
         button1.pack()
-        button2 = tk.Button(self, text="Login", command=lambda: controller.show_frame(ConnectPage))
+        button2 = tk.Button(self, text="Back", command=lambda: controller.show_frame(ConnectPage))
         button2.pack()
+
         listbox = tk.Listbox(self)
         listbox.insert(tk.END, "Io")
         listbox.insert(tk.END, "Europa")
         listbox.insert(tk.END, "Ganymede")
         listbox.insert(tk.END, "Callisto")
+
         listbox.pack(fill=tk.BOTH, expand=0)
 
 
