@@ -1,7 +1,10 @@
 import tkinter as tk
 import tkinter.ttk as tkk
+
 LARGE_FONT = ("Helvetica", 12)
 SMALL_FONT = ("Helvetica", 8)
+
+DESCRIPTION_TEXT = "description"
 class SharedPower(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -97,10 +100,12 @@ class SearchPage(tk.Frame):
         label2.image = photoimage
         label2.pack()
         username = tk.Label(self, text="Luke Logan", font=SMALL_FONT).pack()
-        button = tk.Button(self, text="Logout", command=lambda: controller.show_frame(SignInPage))
+        button = tk.Button(self, text="Logout", command=lambda: controller.show_frame(StartPage))
         button.pack()
-        button1 = tk.Button(self, text="My Tools", command=lambda: controller.show_frame(MyToolsPage))
+        button1 = tk.Button(self, text="My tools", command=lambda: controller.show_frame(MyToolsPage))
         button1.pack()
+        button = tk.Button(self, text="Add tool", command=lambda: controller.show_frame(AddPage))
+        button.pack()
         search = tk.Entry(self)
         search.pack()
         button2 = tk.Button(self, text="Search", command=lambda: controller.show_frame(ResultPage))
@@ -120,35 +125,64 @@ class ServerDownPage(tk.Frame):
 class ResultPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        button1 = tk.Button(self, text="Logout", command=lambda: controller.show_frame(SignInPage))
+        button1 = tk.Button(self, text="Logout", command=lambda: controller.show_frame(StartPage))
         button1.pack()
-        button2 = tk.Button(self, text="Back", command=lambda: controller.show_frame(ConnectPage))
+        button2 = tk.Button(self, text="Back", command=lambda: controller.show_frame(SearchPage))
         button2.pack()
+        search = tk.Entry(self)
+        search.pack()
+        button2 = tk.Button(self, text="Search", command=lambda: controller.show_frame(ResultPage))
+        button2.pack()
+        scrollbar = tkk.Scrollbar(self)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
-        listbox = tk.Listbox(self)
-        listbox.insert(tk.END, "Io")
-        listbox.insert(tk.END, "Europa")
-        listbox.insert(tk.END, "Ganymede")
-        listbox.insert(tk.END, "Callisto")
+        mylist = tk.Listbox(self, yscrollcommand=scrollbar.set)
+        for line in range(100):
+            mylist.insert(tk.END, "This is line number " + str(line))
 
-        listbox.pack(fill=tk.BOTH, expand=0)
+        mylist.pack(side=tk.LEFT, fill=tk.BOTH)
+        scrollbar.config(command=mylist.yview)
 
+        #self.yScroll = tk.Scrollbar(self, orient=tk.VERTICAL)
+        #self.listbox = tk.Listbox(self, yscrollcommad=self.yScroll.set)
+        #self.listbox.grid(row=0, column=0, sticky=tk.N+tk.S+tk.E+tk.W)
+        #self.yScroll['command'] = self.listbox.yview
 
 class AddPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Welcome to SharedPower", font=LARGE_FONT)
-        label.pack(pady=10, padx=10)
-        button1 = tk.Button(self, text="Sign in", command=lambda: controller.show_frame(SignInPage))
+        button1 = tk.Button(self, text="Logout", command=lambda: controller.show_frame(StartPage))
         button1.pack()
-        button2 = tk.Button(self, text="Login", command=lambda: controller.show_frame(ConnectPage))
+        button2 = tk.Button(self, text="Back", command=lambda: controller.show_frame(SearchPage))
         button2.pack()
+        label = tk.Label(self, text="Add tool", font=LARGE_FONT)
+        label.pack(pady=10, padx=10)
+        label1 = tk.Label(self, text="Name:", font=LARGE_FONT).pack()
+        Name = tk.Entry(self)
+        Name.pack()
+        label2 = tk.Label(self, text="Type:", font=LARGE_FONT).pack()
+        Type = tkk.Combobox(self)
+        Type.pack()
+        label3 = tk.Label(self, text="Condition:", font=LARGE_FONT).pack()
+        condition = tkk.Combobox(self)
+        condition.pack()
+        #login = tk.Entry(self)
+        #login.pack()
+        test = tk.PhotoImage(file="res/image_128.png")
+        product_image = tk.Label(self, image=test)
+        product_image.image = test
+        product_image.pack()
+        label4 = tk.Label(self, text="Describe product:", font=LARGE_FONT).pack()
+        description = tk.Entry(self, textvariable=DESCRIPTION_TEXT)
+        description.pack()
+
+
 class MyToolsPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Welcome to SharedPower", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
-        button1 = tk.Button(self, text="Sign in", command=lambda: controller.show_frame(SignInPage))
+        button1 = tk.Button(self, text="Sign in", command=lambda: controller.show_frame(StartPage))
         button1.pack()
         button2 = tk.Button(self, text="Login", command=lambda: controller.show_frame(ConnectPage))
         button2.pack()
@@ -157,7 +191,7 @@ class ProductPage(tk.Frame):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Welcome to SharedPower", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
-        button1 = tk.Button(self, text="Sign in", command=lambda: controller.show_frame(SignInPage))
+        button1 = tk.Button(self, text="Sign in", command=lambda: controller.show_frame(StartPage))
         button1.pack()
         button2 = tk.Button(self, text="Login", command=lambda: controller.show_frame(ConnectPage))
         button2.pack()
@@ -166,7 +200,7 @@ class SuccessPage(tk.Frame):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Welcome to SharedPower", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
-        button1 = tk.Button(self, text="Sign in", command=lambda: controller.show_frame(SignInPage))
+        button1 = tk.Button(self, text="Sign in", command=lambda: controller.show_frame(StartPage))
         button1.pack()
         button2 = tk.Button(self, text="Login", command=lambda: controller.show_frame(ConnectPage))
         button2.pack()
@@ -175,7 +209,7 @@ class ErrorPage(tk.Frame):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Welcome to SharedPower", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
-        button1 = tk.Button(self, text="Sign in", command=lambda: controller.show_frame(SignInPage))
+        button1 = tk.Button(self, text="Sign in", command=lambda: controller.show_frame(StartPage))
         button1.pack()
         button1.pack()
         button2 = tk.Button(self, text="Login", command=lambda: controller.show_frame(ConnectPage))
