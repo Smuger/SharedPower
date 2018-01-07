@@ -10,9 +10,13 @@ class SharedPower(tk.Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
         self.frames = {}
-        for F in (StartPage, ConnectPage, SignInPage, SearchPage, ServerDownPage, ResultPage, AddPage, MyToolsPage, ProductPage, SuccessPage, ErrorPage):
+        for F in (
+        StartPage, ConnectPage, SignInPage, SearchPage, ServerDownPage, ResultPage, AddPage, MyToolsPage, ProductPage,
+        SuccessPage, ErrorPage):
             frame = F(container, self)
+
             self.frames[F] = frame
+
             frame.grid(row=0, column=0, sticky="nsew")
         self.show_frame(StartPage)
 
@@ -33,11 +37,11 @@ class SignInPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         photoimage = tk.PhotoImage(file="res/tools_128.png")
-        label = tk.Label(image=photoimage)
-        label.image = photoimage
-        label.pack()
-        label = tk.Label(self, text="Sign in", font=LARGE_FONT)
-        label.pack(pady=10,padx=10)
+        label1 = tk.Label(self, image=photoimage)
+        label1.image = photoimage
+        label1.pack()
+        label2 = tk.Label(self, text="Sign in", font=LARGE_FONT)
+        label2.pack(pady=10,padx=10)
         button1 = tk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
         button1.pack()
         button2 = tk.Button(self, text="Login", command=lambda: controller.show_frame(StartPage))
@@ -48,14 +52,14 @@ class ConnectPage(tk.Frame):
         label = tk.Label(self, text="Connecting", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
-        self.progressbar = tkk.Progressbar()
+        self.progressbar = tkk.Progressbar(self)
         self.progressbar.config(maximum=10)
         self.progressbar.pack()
 
-        button = tk.Button(text="Start", command=self.on_start_button_clicked)
+        button = tk.Button(self, text="Start", command=self.on_start_button_clicked)
         button.pack()
 
-        button = tk.Button(text="Stop", command=self.on_stop_button_clicked)
+        button = tk.Button(self, text="Stop", command=self.on_stop_button_clicked)
         button.pack()
 
     def on_start_button_clicked(self):
@@ -77,12 +81,12 @@ class SearchPage(tk.Frame):
 class ServerDownPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Server Down", font=LARGE_FONT)
-        label.pack(pady=10, padx=10)
+        label1 = tk.Label(self, text="Server Down", font=LARGE_FONT)
+        label1.pack(pady=10, padx=10)
         photoimage = tk.PhotoImage(file="res/x_128.png")
-        label = tk.Label(image=photoimage)
-        label.image = photoimage
-        label.pack()
+        label2 = tk.Label(self, image=photoimage)
+        label2.image = photoimage
+        label2.pack()
 class ResultPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -92,7 +96,7 @@ class ResultPage(tk.Frame):
         button1.pack()
         button2 = tk.Button(self, text="Login", command=lambda: controller.show_frame(ConnectPage))
         button2.pack()
-        listbox = tk.Listbox()
+        listbox = tk.Listbox(self)
         listbox.insert(tk.END, "Io")
         listbox.insert(tk.END, "Europa")
         listbox.insert(tk.END, "Ganymede")
