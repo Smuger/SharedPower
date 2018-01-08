@@ -24,7 +24,7 @@ class SharedPower(tk.Tk):
 
             frame.grid(row=0, column=0, sticky="nsew")
         self.show_frame(StartPage)
-        
+
 
     def show_frame(self, cont):
         frame = self.frames[cont]
@@ -135,15 +135,15 @@ class ResultPage(tk.Frame):
         search.pack()
         button2 = tk.Button(self, text="Search", command=lambda: controller.show_frame(ResultPage))
         button2.pack()
+        #Scroll not done
         scrollbar = tkk.Scrollbar(self)
-        scrollbar.pack()
-
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         mylist = tk.Listbox(self, yscrollcommand=scrollbar.set)
         for line in range(100):
             mylist.insert(tk.END, "This is line number " + str(line))
 
         mylist.pack(fill=tk.BOTH)
-        scrollbar.config(command=mylist.yview)
+        scrollbar.config(command=mylist.yview,)
 
         #self.yScroll = tk.Scrollbar(self, orient=tk.VERTICAL)
         #self.listbox = tk.Listbox(self, yscrollcommad=self.yScroll.set)
@@ -198,49 +198,31 @@ class MyToolsPage(tk.Frame):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="My Tools", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
-        button1 = tk.Button(self, text="Sign in", command=lambda: controller.show_frame(StartPage))
+        button1 = tk.Button(self, text="Logout", command=lambda: controller.show_frame(StartPage))
         button1.pack()
-        button2 = tk.Button(self, text="Login", command=lambda: controller.show_frame(ConnectPage))
+        button2 = tk.Button(self, text="Back", command=lambda: controller.show_frame(SearchPage))
         button2.pack()
+        label1 = tk.Label(self, text="Leased:", font=LARGE_FONT)
+        label1.pack(pady=10, padx=10)
+        scrollbar1 = tkk.Scrollbar(self)
+        scrollbar1.pack(side=tk.RIGHT, fill=tk.Y)
+        mylist1 = tk.Listbox(self, yscrollcommand=scrollbar1.set)
+        for line in range(100):
+            mylist1.insert(tk.END, "This is line number " + str(line))
 
-        #ScrollTest
-        # create a canvas object and a vertical scrollbar for scrolling it
-        vscrollbar = tk.Scrollbar(self, orient=tk.VERTICAL)
-        vscrollbar.pack(fill=tk.Y, side=tk.RIGHT, expand=tk.FALSE)
-        canvas = tk.Canvas(self, bd=0, highlightthickness=0,
-                        yscrollcommand=vscrollbar.set)
-        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=tk.TRUE)
-        vscrollbar.config(command=canvas.yview)
+        mylist1.pack(fill=tk.BOTH)
+        scrollbar1.config(command=mylist1.yview)
 
-        # reset the view
-        canvas.xview_moveto(0)
-        canvas.yview_moveto(0)
+        label2 = tk.Label(self, text="Rented:", font=LARGE_FONT)
+        label2.pack(pady=10, padx=10)
+        scrollbar2 = tkk.Scrollbar(self)
+        scrollbar2.pack(side=tk.RIGHT, fill=tk.Y)
+        mylist2 = tk.Listbox(self, yscrollcommand=scrollbar2.set)
+        for line in range(100):
+            mylist2.insert(tk.END, "This is line number " + str(line))
 
-        # create a frame inside the canvas which will be scrolled with it
-        self.interior = interior = tk.Frame(canvas)
-        interior_id = canvas.create_window(0, 0, window=interior,
-                                           anchor=tk.NW)
-
-        # track changes to the canvas and frame width and sync them,
-        # also updating the scrollbar
-        def _configure_interior(event):
-            # update the scrollbars to match the size of the inner frame
-            size = (interior.winfo_reqwidth(), interior.winfo_reqheight())
-            canvas.config(scrollregion="0 0 %s %s" % size)
-            if interior.winfo_reqwidth() != canvas.winfo_width():
-                # update the canvas's width to fit the inner frame
-                canvas.config(width=interior.winfo_reqwidth())
-
-        interior.bind('<Configure>', _configure_interior)
-
-        def _configure_canvas(event):
-            if interior.winfo_reqwidth() != canvas.winfo_width():
-                # update the inner frame's width to fill the canvas
-                canvas.itemconfigure(interior_id, width=canvas.winfo_width())
-
-        canvas.bind('<Configure>', _configure_canvas)
-        #ScrollTest
-
+        mylist2.pack(fill=tk.BOTH)
+        scrollbar1.config(command=mylist2.yview, )
 
 class ProductPage(tk.Frame):
     def __init__(self, parent, controller):
