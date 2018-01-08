@@ -24,10 +24,12 @@ class SharedPower(tk.Tk):
 
             frame.grid(row=0, column=0, sticky="nsew")
         self.show_frame(StartPage)
+        
 
     def show_frame(self, cont):
         frame = self.frames[cont]
         frame.tkraise()
+
 class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -188,7 +190,7 @@ class AddPage(tk.Frame):
         price_hour = tk.Entry(self, textvariable=DESCRIPTION_TEXT).pack()
         label11 = tk.Label(self, text="Per month:", font=SMALL_FONT).pack()
         price_day = tk.Entry(self, textvariable=DESCRIPTION_TEXT).pack()
-        button3 = tk.Button(self, text="Add this tool", command=lambda: controller.show_frame(SearchPage))
+        button3 = tk.Button(self, text="Add this tool", command=lambda: controller.show_frame(SuccessPage))
         button3.pack(pady=10, padx=10)
 
 class MyToolsPage(tk.Frame):
@@ -252,22 +254,17 @@ class ProductPage(tk.Frame):
 class SuccessPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Welcome to SharedPower", font=LARGE_FONT)
-        label.pack(pady=10, padx=10)
-        button1 = tk.Button(self, text="Sign in", command=lambda: controller.show_frame(StartPage))
-        button1.pack()
-        button2 = tk.Button(self, text="Login", command=lambda: controller.show_frame(ConnectPage))
-        button2.pack()
+        label1 = tk.Label(self, text="Success",fg="green", font=LARGE_FONT)
+        label1.pack(pady=10, padx=10)
+        button = tk.Button(self, text="Back", command=lambda: controller.show_frame(SearchPage))
+        button.pack()
 class ErrorPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Welcome to SharedPower", font=LARGE_FONT)
-        label.pack(pady=10, padx=10)
-        button1 = tk.Button(self, text="Sign in", command=lambda: controller.show_frame(StartPage))
-        button1.pack()
-        button1.pack()
-        button2 = tk.Button(self, text="Login", command=lambda: controller.show_frame(ConnectPage))
-        button2.pack()
+        label1 = tk.Label(self, text="Error", fg="red", font=LARGE_FONT)
+        label1.pack(pady=10, padx=10)
+        button = tk.Button(self, text="Back", command=lambda: controller.show_frame(SearchPage))
+        button.pack()
 if __name__ == "__main__":
     #ScrollTest
     class SampleApp(tk.Tk):
