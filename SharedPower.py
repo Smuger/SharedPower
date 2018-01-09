@@ -1,9 +1,9 @@
 """
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
- * <phk@FreeBSD.ORG> wrote this file.  As long as you retain this notice you
+ * <krzysiek.kwietniewski@gmail.com> wrote this file.  As long as you retain this notice you
  * can do whatever you want with this stuff. If we meet some day, and you think
- * this stuff is worth it, you can buy me a beer in return.   Poul-Henning Kamp
+ * this stuff is worth it, you can buy me a beer in return.   Krzysztof Kwietniewski
  * ----------------------------------------------------------------------------
 """
 
@@ -26,6 +26,7 @@ NAME = ""
 TYPE = ""
 PRICE_DAY = 0
 PRICE_HOUR = 0
+WALLET = 0
 
 class SharedPower(Tk):
     def __init__(self, *args, **kwargs):
@@ -260,7 +261,7 @@ class MyToolsPage(Frame):
         back = Button(self, text="Back", command=lambda: controller.show_frame(SearchPage)).pack(pady=10, padx=10)
 
         # topic
-        topic = Label(self, text="My tool", font=LARGE_FONT).pack(pady=10, padx=10)
+        topic = Label(self, text="Your balance is: " + str(WALLET) + "£", font=LARGE_FONT).pack(pady=10, padx=10)
 
         # what tools you leased
         Label(self, text="Leased:", font=LARGE_FONT).pack(pady=10, padx=10)
