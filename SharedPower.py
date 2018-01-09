@@ -69,7 +69,7 @@ class StartPage(Frame):
         topic = Label(self, text="Welcome to SharedPower", font=LARGE_FONT).pack(pady=10, padx=10)
 
         # sign up
-        signUp = Button(self, text="Sing up", command=lambda: controller.show_frame(SignInPage)).pack(pady=10, padx=10)
+        signUp = Button(self, text="Sign up", command=lambda: controller.show_frame(SignInPage)).pack(pady=10, padx=10)
 
         # login
         login = Entry(self, textvariable=LOGIN).pack()
@@ -114,7 +114,7 @@ class SignInPage(Frame):
         Frame.__init__(self, parent)
 
         # topic
-        topic = Label(self, text="Welcome to SharedPower", font=LARGE_FONT).pack(pady=10, padx=10)
+        topic = Label(self, text="Create Account", font=LARGE_FONT).pack(pady=10, padx=10)
 
         # back
         back = Button(self, text="Back", command=lambda: controller.show_frame(StartPage)).pack(pady=10, padx=10)
@@ -129,8 +129,8 @@ class SignInPage(Frame):
         Label(self, text="Password again:", font=SMALL_FONT).pack()
         password_is_same = Entry(self, show="*", textvariable=PASSWORD_NEW).pack()
 
-        # Sign in
-        sign_in = Button(self, text="Sign in", command=lambda: controller.show_frame(StartPage)).pack(pady=10, padx=10)
+        # Sign up
+        sign_up = Button(self, text="Sign up", command=lambda: controller.show_frame(StartPage)).pack(pady=10, padx=10)
 
 class SearchPage(Frame):
     def __init__(self, parent, controller):
