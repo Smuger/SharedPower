@@ -5,7 +5,7 @@ from tkinter.ttk import *
 LARGE_FONT = ("Helvetica", 12)
 SMALL_FONT = ("Helvetica", 8)
 
-# text storage
+# storage
 DESCRIPTION = ""
 LOGIN = ""
 LOGIN_NEW = ""
