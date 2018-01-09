@@ -15,7 +15,7 @@ LARGE_FONT = ("Helvetica", 12)
 SMALL_FONT = ("Helvetica", 8)
 
 # storage
-DESCRIPTION = ""
+DESCRIPTION = "test"
 LOGIN = ""
 LOGIN_NEW = ""
 PASSWORD = ""
@@ -24,9 +24,14 @@ SEARCH = ""
 SEARCH_RESULT = ""
 NAME = ""
 TYPE = ""
+PRODUCT_NAME = "test"
+PRODUCT_AVAILABLE_DAY = 00
+PRODUCT_AVAILABLE_MONTH = 00
+PRODUCT_AVAILABLE_YEAR = 0000
 PRICE_DAY = 0
 PRICE_HOUR = 0
 WALLET = 0
+CALCULATED_PRICE = 0
 
 class SharedPower(Tk):
     def __init__(self, *args, **kwargs):
@@ -198,6 +203,9 @@ class ResultPage(Frame):
         scrollbar.config(command=record.yview())
         # scrollbar
 
+        # to product NOT-WORK
+        next = Button(self, text="test// Next", command=lambda: controller.show_frame(ProductPage)).pack()
+
 class AddPage(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
@@ -298,6 +306,38 @@ class ProductPage(Frame):
 
         # back
         back = Button(self, text="Back", command=lambda: controller.show_frame(SearchPage)).pack()
+
+        # name
+        name = Label(self, text=PRODUCT_NAME, font=LARGE_FONT).pack(pady=10, padx=10)
+
+        # photo
+        photo_file = PhotoImage(file="res/tools_128.png")
+        photo = Label(self, image=photo_file)
+        photo.image = photo_file
+        photo.pack()
+
+        # description
+        description_label = Label(self, text=str(DESCRIPTION), font=SMALL_FONT).pack()
+
+        # date
+        Label(self, text="Product will be available: ", font=LARGE_FONT).pack()
+        date = Label(self, text=str(PRODUCT_AVAILABLE_DAY) + "/" + str(PRODUCT_AVAILABLE_MONTH) + "/" + str(PRODUCT_AVAILABLE_YEAR), font=LARGE_FONT).pack()
+        Label(self, text="Your rent day:", font=LARGE_FONT).pack()
+        Label(self, text="Hour:", font=SMALL_FONT).pack()
+        hour = Combobox(self).pack()
+        Label(self, text="Day:", font=SMALL_FONT).pack()
+        day = Combobox(self).pack()
+        Label(self, text="Month:", font=SMALL_FONT).pack()
+        month = Combobox(self).pack()
+        Label(self, text="Year:", font=SMALL_FONT).pack()
+        year = Combobox(self).pack()
+
+        # calculated price
+        price_label = Label(self, text="Price: " + str(DESCRIPTION) + "£", font=LARGE_FONT).pack(pady=10, padx=10)
+
+        # pay
+        pay = Button(self, text="Pay", command=lambda: controller.show_frame(SuccessPage)).pack()
+
 
 class SuccessPage(Frame):
     def __init__(self, parent, controller):
