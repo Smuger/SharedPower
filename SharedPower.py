@@ -11,6 +11,9 @@ from tkinter import *
 from tkinter.ttk import *
 from tinydb import *
 import time
+from time import mktime
+from datetime import datetime
+from getpass import getpass
 
 # fonts
 LARGE_FONT = ("Helvetica", 12)
@@ -436,6 +439,7 @@ class ErrorPage(Frame):
 
 #BACKEND _________________-
 
+#DATABASE
 class DataBaseController:
     userdb = ""
     toolsdb = ""
@@ -476,6 +480,242 @@ class DataBaseController:
     def addrental(self, userid, toolid, startdate, enddate):
         self.rentalsdb.insert(
             {"id": time.time(), 'userid': userid, 'toolid': toolid, 'startdate': startdate, 'enddate': enddate})
+
+#LOGIN
+
+class LoginController:
+    session = False
+    userid = 0
+
+    def __init__(self):
+        pass
+
+    def login(self, username, password):
+        if (self.session):
+            what_to_do = input("You are already login, do you want log in to another account? (Y/N):")
+            if (what_to_do == "Y"):
+                self.logout()
+        else:
+            db = DataBaseController()
+            login = db.getuser("login", username, password)
+            # print(login)
+            if (login):
+                self.session = True
+                self.userid = login[0]["id"]
+            else:
+                print("Bad password or login")
+
+    def logout(self):
+        self.session = False
+
+#RENTALS
+
+class RentalController:
+
+    def check_availability(self, toolid, startdate, enddate):
+        db = DataBaseController()
+        if db.checkavaiblity(toolid, startdate, enddate):
+            return False
+        return True
+
+    def add_rental(self, userid, toolid, startdate, enddate):
+        db = DataBaseController()
+        db.addrental(userid, toolid, startdate, enddate)
+
+#TOOLS
+
+class ToolController():
+    tool_list = []
+    rental = RentalController();
+
+    def hire(self):
+        return
+
+    def list_all(self, userid):
+        db = DataBaseController()
+        self.tool_list = db.gettool("userid", userid)
+
+        while (self.display_menu()):
+            pass
+
+    def search_by_type(self, typeof, userid):
+        db = DataBaseController()
+        self.tool_list = db.gettool("typeof", typeof)
+        while self.display_rental_menu(userid):
+            pass
+
+    def search_by_name(self, name, userid):
+        db = DataBaseController()
+        self.tool_list = db.gettool("name", name)
+        while self.display_rental_menu(userid):
+            pass
+
+    def add_tool(self, userid, name, price, type):
+        db = DataBaseController()
+        db.createtool(userid, name, price, type)
+
+    def remove_tool(self):
+        return
+
+    def display_menu(self):
+        for index, toolitem in enumerate(self.tool_list):
+            print(toolitem["name"], "to edit choose: ", index)
+        print("to back to main meny choose x")
+        where_to_go = input("Your choose:")
+        if (where_to_go == "x"):
+            return False
+        elif (int(where_to_go) in range(0, len(self.tool_list))):
+            print("Edit of Tool")
+
+        else:
+            print("Not allowed selection")
+        return True
+
+    def display_rental_menu(self, userid):
+        for index, toolitem in enumerate(self.tool_list):
+            print(toolitem["name"], "to choose: ", index)
+        print("to back to main meny choose x")
+        where_to_go = input("Your choose:")
+        if (where_to_go == "x"):
+
+            return False
+        elif (int(where_to_go) in range(0, len(self.tool_list))):
+            print("Option of Tool")
+            print("Now you could check availability of tool")
+            start = datetime.strptime(input("Begging date(dd/mm/yyyy):"), "%d/%m/%Y").timetuple()
+            beg_date = mktime(start)
+            end = datetime.strptime(input("End date(dd/mm/yyyy):"), "%d/%m/%Y").timetuple()
+            end_date = mktime(end)
+            print(beg_date, "test", end_date)
+            if (self.rental.check_availability(int(where_to_go), beg_date, end_date)):
+
+                if(input("Tool is avaible, do you want reserve? (y/n)")=="y"):
+                    self.rental.add_rental(userid, int(where_to_go), beg_date, end_date)
+
+        else:
+            print("Not allowed selection")
+        return True
+
+#USER
+class UserController:
+    def __init__(self):
+        return
+
+    def create_account(self, username, password):
+        db = DataBaseController()
+        db.createuser(username, password)
+        print("Account for " + username + " Created")
+
+#MENU DATA
+class MenuController:
+    login = LoginController()
+
+    def __init__(self):
+        self.data = []
+        self.user = UserController()
+        self.tool = ToolController()
+
+    def display_menu(self):
+
+        if self.login.session:
+            print("Logout: 1")
+
+        else:
+            print("Login: 1")
+
+        print("Search Tool: 2")
+        if self.login.session:
+            print("Add Tool: 3")
+            print("My Rentals: 4")
+            print("My Tools: 5")
+        else:
+            print("Create Account: 3")
+        print("Exit: 6")
+        where_to_go = input("Where do you want to go?")
+
+        if (where_to_go == "1" and self.login.session):
+            print("Logout")
+            self.logout_menu()
+        elif (where_to_go == "1"):
+            print("Login")
+            self.login_menu()
+        elif (where_to_go == "2"):
+            print("Search Tool:")
+            self.search_tool("typeorname")
+
+        elif (where_to_go == "3" and self.login.session):
+            print("Add Tool")
+            self.create_tool()
+        elif (where_to_go == "3"):
+            print("Create Account")
+            self.create_account_menu()
+        elif (where_to_go == "4"):
+            print("My Rentals")
+        elif (where_to_go == "5"):
+            print("My Tools")
+            self.search_tool("userid")
+        elif (where_to_go == "6"):
+            exit()
+        else:
+            print("Not allowed selection")
+
+    def login_menu(self):
+
+        username = input("Insert Login:")
+        password = getpass()
+        # print("username: " + username + "Password: " + password)
+        self.login.login(username, password)
+
+    def create_account_menu(self):
+
+        username = input("Insert Login")
+        password = 1
+        password2 = 2
+        while (password != password2):
+            password = getpass()
+            password2 = getpass()
+            if (password != password2):
+                print("Passwords doesn't match, try again!")
+        self.user.create_account(username, password)
+
+    def logout_menu(self):
+        if (self.login.session):
+            choose = input("Are you sure? (Y/N):")
+            if (choose == "Y"):
+                self.login.logout()
+                print("You are logout")
+
+    def create_tool(self):
+
+        name = input("Insert toolname: ")
+        price = input("Insert price: ")
+        type = input("insert type: ")
+        self.tool.add_tool(self.login.userid, name, price, type)
+
+    def search(self):
+        print("to search by name: 1")
+        print("to search by type: 2")
+        print("to exit to main menu: x")
+        where_to_go = input("How would you like a search")
+        if (where_to_go == "x"):
+            return False
+        elif where_to_go == "1":
+            what_do_you_want_find = input("what would you like a search")
+            self.tool.search_by_name(what_do_you_want_find, self.login.userid)
+            pass
+        elif where_to_go == "2":
+            what_do_you_want_find = input("what would you like a search")
+            self.tool.search_by_type(what_do_you_want_find, self.login.userid)
+            pass
+
+        return True
+
+    def search_tool(self, searchby):
+        if (searchby == "userid"):
+            self.tool.list_all(self.login.userid)
+        else:
+            while self.search():
+                pass
 
 
 #BACKEND __________________
