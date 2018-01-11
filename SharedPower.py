@@ -437,7 +437,7 @@ class ErrorPage(Frame):
         # back
         back = Button(self, text="Back", command=lambda: controller.show_frame(SearchPage)).pack()
 
-#BACKEND _________________-
+# __________________BACKEND __________________
 
 #DATABASE
 class DataBaseController:
@@ -718,7 +718,7 @@ class MenuController:
                 pass
 
 
-#BACKEND __________________
+# __________________BACKEND __________________
 
 #main loop
 if __name__ == "__main__":
