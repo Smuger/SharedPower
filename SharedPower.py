@@ -9,13 +9,19 @@
 
 from tkinter import *
 from tkinter.ttk import *
+from tinydb import *
+import time
 
 # fonts
 LARGE_FONT = ("Helvetica", 12)
 SMALL_FONT = ("Helvetica", 8)
 
 # storage
-DESCRIPTION = "test"
+DESCRIPTION = "The Bosch GSA18V-125 EC Brushless 1.25 In.-Stroke Multi-Grip Reciprocating Saw is the first cordless " \
+              "recip saw with orbital and non-orbital sawing action for superior cutting in materials from wood to " \
+              "metal. It is engineered to be the most effective 18V demolition recip saw available. With an innovative " \
+              "and easy-to-handle angled-motor design, it has extremely versatile ergonomic multi-position grip areas " \
+              "with soft-grip."
 LOGIN = ""
 LOGIN_NEW = ""
 PASSWORD = ""
@@ -24,7 +30,12 @@ SEARCH = ""
 SEARCH_RESULT = ""
 NAME = ""
 TYPE = ""
-PRODUCT_NAME = "test"
+LOGIN_EMAIL = ""
+LOGIN_POSTCODE = ""
+LOGIN_ADDRESS = ""
+LOGIN_CODE = ""
+LOGIN_CODE_BACK = ""
+PRODUCT_NAME = "Bosch Saw GSA18V-125N"
 PRODUCT_AVAILABLE_DAY = 00
 PRODUCT_AVAILABLE_MONTH = 00
 PRODUCT_AVAILABLE_YEAR = 0000
@@ -33,9 +44,22 @@ PRICE_HOUR = 0
 WALLET = 0
 CALCULATED_PRICE = 0
 
+IS_LOGIN = False
+
+SIGN_UP_DICT = {}
+#dict['one'] = "This is one"
+#dict[2]     = "This is two"
+#tinydict = {'name': 'john','code':6734, 'dept': 'sales'}
+
 class SharedPower(Tk):
     def __init__(self, *args, **kwargs):
-        Tk.__init__(self, *args, **kwargs)
+        root = Tk.__init__(self, *args, **kwargs)
+
+
+        # images of products
+        PRODUCT_IMAGE_SAW = PhotoImage(file="res/saw_GSA18V-125N_128.png")
+
+
 
         # title of the pages
         self.title("Shared Power")
@@ -54,8 +78,27 @@ class SharedPower(Tk):
             frame.grid(row=0, column=0, sticky="nsew")
         self.show_frame(StartPage)
 
+
     # this function stacks pages and displays the current one
     def show_frame(self, cont):
+        frame = self.frames[cont]
+        frame.tkraise()
+    """
+    def show_frame_and_login(self, cont):
+        global IS_LOGIN
+        IS_LOGIN = True
+        frame = self.frames[cont]
+        frame.tkraise()
+        return IS_LOGIN
+    def show_frame_and_logout(self, cont):
+        global IS_LOGIN
+        IS_LOGIN = False
+        frame = self.frames[cont]
+        frame.tkraise()
+    """
+    def show_frame_and_signup(self, cont):
+        global IS_LOGIN
+        IS_LOGIN = False
         frame = self.frames[cont]
         frame.tkraise()
 
@@ -84,6 +127,10 @@ class StartPage(Frame):
 
         # sign in
         signIn = Button(self, text="Sign in", command=lambda: controller.show_frame(ConnectPage)).pack(pady=10, padx=10)
+
+        # Search part
+        search_entry = Entry(self, textvariable=SEARCH).pack(pady=10, padx=10)
+        search = Button(self, text="Search", command=lambda: controller.show_frame(ResultPage)).pack()
 
 class ConnectPage(Frame):
     def __init__(self, parent, controller):
@@ -126,7 +173,7 @@ class SignInPage(Frame):
 
         # login
         Label(self, text="Login:", font=SMALL_FONT).pack()
-        login = Entry(self, show="*", textvariable=LOGIN_NEW).pack()
+        login = Entry(self, textvariable=LOGIN_NEW).pack()
 
         # password
         Label(self, text="Password:", font=SMALL_FONT).pack()
@@ -134,8 +181,28 @@ class SignInPage(Frame):
         Label(self, text="Password again:", font=SMALL_FONT).pack()
         password_is_same = Entry(self, show="*", textvariable=PASSWORD_NEW).pack()
 
+        # email
+        Label(self, text="Email:", font=SMALL_FONT).pack()
+        login = Entry(self, textvariable=LOGIN_EMAIL).pack()
+
+        # postcode
+        Label(self, text="Postcode:", font=SMALL_FONT).pack()
+        login = Entry(self, textvariable=LOGIN_POSTCODE).pack()
+
+        # address
+        Label(self, text="Address:", font=SMALL_FONT).pack()
+        login = Entry(self, textvariable=LOGIN_ADDRESS).pack()
+
+        # card
+        Label(self, text="Card owner name:", font=SMALL_FONT).pack()
+        login = Entry(self, textvariable=LOGIN_CODE).pack()
+
+        # card back
+        Label(self, text="Card details:", font=SMALL_FONT).pack()
+        login = Entry(self, textvariable=LOGIN_CODE_BACK).pack()
+
         # Sign up
-        sign_up = Button(self, text="Sign up", command=lambda: controller.show_frame(StartPage)).pack(pady=10, padx=10)
+        sign_up = Button(self, text="Sign up", command=lambda: controller.show_frame_and_signup(StartPage)).pack(pady=10, padx=10)
 
 class SearchPage(Frame):
     def __init__(self, parent, controller):
@@ -156,11 +223,8 @@ class SearchPage(Frame):
         # mytools
         mytools = Button(self, text="My tools", command=lambda: controller.show_frame(MyToolsPage)).pack()
 
-        # addtool
-        addtool = Button(self, text="Add tool", command=lambda: controller.show_frame(AddPage)).pack()
-
         # Search part
-        search_entry = Entry(self, show="*", textvariable=SEARCH).pack(pady=10, padx=10)
+        search_entry = Entry(self, textvariable=SEARCH).pack(pady=10, padx=10)
         search = Button(self, text="Search", command=lambda: controller.show_frame(ResultPage)).pack()
 
 class ServerDownPage(Frame):
@@ -183,7 +247,6 @@ class ResultPage(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
 
-        # logout
         logout = Button(self, text="Logout", command=lambda: controller.show_frame(StartPage)).pack()
 
         # back
@@ -193,6 +256,7 @@ class ResultPage(Frame):
         search_entry = Entry(self, show="*", textvariable=SEARCH_RESULT).pack(pady=10, padx=10)
         search = Button(self, text="Search", command=lambda: controller.show_frame(ResultPage)).pack()
 
+        """
         # scrollbar NOT-WORK
         scrollbar = Scrollbar(self)
         scrollbar.pack(side=RIGHT, fill=Y)
@@ -202,8 +266,8 @@ class ResultPage(Frame):
         record.pack(fill=BOTH)
         scrollbar.config(command=record.yview())
         # scrollbar
-
         # to product NOT-WORK
+        """
         next = Button(self, text="test// Next", command=lambda: controller.show_frame(ProductPage)).pack()
 
 class AddPage(Frame):
@@ -225,9 +289,6 @@ class AddPage(Frame):
 
         Label(self, text="Type:", font=SMALL_FONT).pack()
         type = Entry(self, textvariable=TYPE).pack()
-
-        Label(self, text="Condition:", font=LARGE_FONT).pack()
-        condition = Combobox(self).pack()
 
         # add pic NOT-WORK
         Label(self, text="Photo:", font=LARGE_FONT).pack()
@@ -271,8 +332,14 @@ class MyToolsPage(Frame):
         # topic
         topic = Label(self, text="Your balance is: " + str(WALLET) + "£", font=LARGE_FONT).pack(pady=10, padx=10)
 
+        # addtool
+        addtool = Button(self, text="Add tool", command=lambda: controller.show_frame(AddPage)).pack()
+
         # what tools you leased
         Label(self, text="Leased:", font=LARGE_FONT).pack(pady=10, padx=10)
+
+        Label(self, text="Condition:", font=LARGE_FONT).pack()
+        condition = Combobox(self).pack()
 
         # scrollbar NOT-WORK
         scrollbar = Scrollbar(self)
@@ -311,13 +378,14 @@ class ProductPage(Frame):
         name = Label(self, text=PRODUCT_NAME, font=LARGE_FONT).pack(pady=10, padx=10)
 
         # photo
-        photo_file = PhotoImage(file="res/tools_128.png")
+        photo_file = PhotoImage(file="res/saw_GSA18V-125N_256.png")
         photo = Label(self, image=photo_file)
         photo.image = photo_file
         photo.pack()
 
         # description
         description_label = Label(self, text=str(DESCRIPTION), font=SMALL_FONT).pack()
+        description_label1 = Text(wrap=WORD)
 
         # date
         Label(self, text="Product will be available: ", font=LARGE_FONT).pack()
@@ -333,7 +401,10 @@ class ProductPage(Frame):
         year = Combobox(self).pack()
 
         # calculated price
-        price_label = Label(self, text="Price: " + str(DESCRIPTION) + "£", font=LARGE_FONT).pack(pady=10, padx=10)
+        price_label = Label(self, text="Price: " + str(CALCULATED_PRICE) + "£", font=LARGE_FONT).pack(pady=10, padx=10)
+
+        Label(self, text="Delivery:", font=SMALL_FONT).pack()
+        delivery = Combobox(self).pack()
 
         # pay
         pay = Button(self, text="Pay", command=lambda: controller.show_frame(SuccessPage)).pack()
@@ -349,6 +420,10 @@ class SuccessPage(Frame):
         # back
         back = Button(self, text="Back", command=lambda: controller.show_frame(SearchPage)).pack()
 
+        # test
+        back = Button(self, text="test// error", command=lambda: controller.show_frame(ErrorPage)).pack(pady=10, padx=10)
+
+
 class ErrorPage(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
@@ -358,6 +433,52 @@ class ErrorPage(Frame):
 
         # back
         back = Button(self, text="Back", command=lambda: controller.show_frame(SearchPage)).pack()
+
+#BACKEND _________________-
+
+class DataBaseController:
+    userdb = ""
+    toolsdb = ""
+    rentalsdb = ""
+
+    def __init__(self):
+        self.userdb = TinyDB("Databases/users.json")
+        self.toolsdb = TinyDB("Databases/tools.json")
+        self.rentalsdb = TinyDB("Databases/rentals.json")
+
+    def createuser(self, username, password):
+        self.userdb.insert({"id": time.time(), 'name': username, 'password': password})
+
+    def getuser(self, action, username, password):
+        User = Query()
+        if (action == "login"):
+            return self.userdb.search(User.name == username and User.password == password)
+
+    def createtool(self, userid, name, price, type):
+        self.toolsdb.insert({"id": time.time(), 'userid': userid, 'name': name, 'price': price, 'type': type})
+
+    def gettool(self, searchby, query):
+        Tool = Query()
+        if (searchby == "typeof"):
+
+            return self.toolsdb.search(Tool.type == query)
+        elif (searchby == "name"):
+            return self.toolsdb.search(Tool.name == query)
+        elif (searchby == "userid"):
+            return self.toolsdb.search(Tool.userid == query)
+
+    def checkavaiblity(self, toolid, startdate, enddate):
+        Rental = Query()
+        return self.rentalsdb.search(
+            Rental.toolid == toolid and (
+                    Rental.startdate >= startdate or Rental.startdate <= enddate or Rental.enddate >= enddate or Rental.enddate >= startdate))
+
+    def addrental(self, userid, toolid, startdate, enddate):
+        self.rentalsdb.insert(
+            {"id": time.time(), 'userid': userid, 'toolid': toolid, 'startdate': startdate, 'enddate': enddate})
+
+
+#BACKEND __________________
 
 #main loop
 if __name__ == "__main__":
